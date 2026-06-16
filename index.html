@@ -2,44 +2,45 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 強制設定網頁寬度，確保在手機上也能維持一排三個的電腦版格式 -->
+    <meta name="viewport" content="width=1000">
     <title>2026 Meta 停權事件悼念區</title>
     <style>
         :root {
             --bg-color: #1a1a1a;
             --text-color: #e0e0e0;
-            --stone-text: #4a4a4a; /* 墓碑上的灰色文字 */
+            --stone-text: #4a4a4a; 
         }
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 20px;
+            padding: 40px 20px;
             text-align: center;
         }
-        h1 { margin-bottom: 5px; font-size: 1.8rem; }
-        p.subtitle { color: #888; margin-bottom: 30px; font-size: 0.9rem; }
+        h1 { margin-bottom: 10px; font-size: 2.5rem; }
+        p.subtitle { color: #888; margin-bottom: 40px; font-size: 1.1rem; }
         
-        /* 控制面板 (搜尋與登記按鈕) */
+        /* 控制面板 */
         .controls {
-            max-width: 800px;
-            margin: 0 auto 30px auto;
+            margin-bottom: 50px;
             display: flex;
-            gap: 10px;
+            gap: 15px;
             justify-content: center;
-            flex-wrap: wrap;
+            align-items: center;
         }
-        input[type="text"], input[type="date"] {
-            padding: 10px;
+        input[type="text"] {
+            padding: 12px;
             border-radius: 5px;
             border: 1px solid #444;
             background: #333;
             color: #fff;
             font-size: 16px;
+            width: 350px;
         }
         button {
-            padding: 10px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 5px;
             background-color: #555;
@@ -52,91 +53,65 @@
         button.btn-danger { background-color: #8b0000; }
         button.btn-danger:hover { background-color: #aa0000; }
 
-        /* 登記死亡表單區域 */
+        /* 登記死亡表單 */
         #register-form {
             display: none;
             background: #2a2a2a;
-            padding: 20px;
+            padding: 25px;
             border-radius: 8px;
-            max-width: 400px;
-            margin: 0 auto 30px auto;
+            max-width: 450px;
+            margin: 0 auto 50px auto;
             text-align: left;
             border: 1px solid #444;
         }
         #register-form div { margin-bottom: 15px; }
-        #register-form label { display: block; margin-bottom: 5px; color: #ccc; font-size: 0.9rem;}
-        #register-form input { width: 100%; box-sizing: border-box; }
+        #register-form label { display: block; margin-bottom: 5px; color: #ccc; }
+        #register-form input { width: 100%; padding: 10px; box-sizing: border-box; background: #1a1a1a; border: 1px solid #444; color: white; }
 
-        /* 墓園網格系統 (預設電腦版) */
+        /* 墓園區域：固定三欄，寬度固定，居中顯示 */
+        .graveyard-container {
+            width: 100%;
+            display: flex;
+            justify-content: center; /* 左右留空的核心 */
+        }
         .graveyard {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            grid-template-columns: repeat(3, 300px); /* 永遠一排三個，每個300px寬 */
+            gap: 40px;
+            padding-bottom: 100px;
         }
 
-        /* 單一墓碑設計 */
+        /* 墓碑圖片與文字疊加 */
         .tombstone-wrapper {
             position: relative;
             width: 100%;
-            animation: fadeIn 1s ease-in;
+            animation: fadeIn 0.8s ease-out;
         }
         .tombstone-wrapper img {
             width: 100%;
             height: auto;
             display: block;
-            filter: drop-shadow(5px 5px 15px rgba(0,0,0,0.8));
+            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
         }
         
-        /* 疊加在墓碑上的文字 */
         .tombstone-text {
             position: absolute;
-            top: 36%; /* 根據圖片調整文字起始高度 */
+            top: 36%; /* 配合圖片中心位置 */
             left: 15%;
             right: 15%;
             text-align: center;
             color: var(--stone-text);
             font-family: 'Times New Roman', 'Microsoft JhengHei', serif;
             font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.5); /* 石刻凹陷感 */
+            pointer-events: none;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.4);
         }
-        .tombstone-text .name { font-size: 1.3rem; margin-bottom: 10px; color: #222; }
-        .tombstone-text .id { font-size: 0.85rem; margin-bottom: 8px; word-break: break-all; }
-        .tombstone-text .date { font-size: 0.8rem; border-top: 1px solid #666; padding-top: 5px; margin-top: 5px; }
+        .tombstone-text .name { font-size: 1.4rem; margin-bottom: 10px; color: #222; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 10px; word-break: break-all; min-height: 1.2em; }
+        .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; color: #555; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* 載入中動畫 */
-        #loading { margin: 50px; font-size: 1.2rem; color: #888; }
-
-        /* ====== 手機版專屬設定 (螢幕寬度小於 600px 時觸發) ====== */
-        @media (max-width: 600px) {
-            .graveyard {
-                grid-template-columns: repeat(2, 1fr); /* 強制一排顯示兩個 (兩欄) */
-                gap: 15px; /* 縮小墓碑之間的距離 */
-                padding: 10px;
-            }
-            .controls {
-                flex-direction: column; /* 搜尋框跟按鈕在手機上改為上下排列 */
-            }
-            
-            /* 縮小手機版墓碑上的文字，避免字體撐破圖片 */
-            .tombstone-text .name { 
-                font-size: 1rem; 
-                margin-bottom: 5px; 
-            }
-            .tombstone-text .id { 
-                font-size: 0.7rem; 
-                margin-bottom: 5px; 
-            }
-            .tombstone-text .date { 
-                font-size: 0.65rem; 
-                padding-top: 3px; 
-                margin-top: 3px; 
-            }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        #loading { margin: 100px; font-size: 1.5rem; color: #666; }
     </style>
 </head>
 <body>
@@ -154,89 +129,73 @@
         <h3 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">通報罹難者</h3>
         <form id="deathForm" onsubmit="submitForm(event)">
             <div>
-                <label>死者名稱 (必填)</label>
-                <input type="text" id="entryName" required>
+                <label>死者名稱 *</label>
+                <input type="text" id="entryName" required placeholder="例如：王小明">
             </div>
             <div>
-                <label>死者 ID (必填)</label>
-                <input type="text" id="entryID" required>
+                <label>死者 ID *</label>
+                <input type="text" id="entryID" required placeholder="例如：xiaoming123">
             </div>
             <div>
                 <label>死亡時間 (年-月-日)</label>
-                <input type="date" id="entryDate">
+                <input type="text" id="entryDate" placeholder="2026-06-15">
             </div>
-            <button type="submit" style="width: 100%; background-color: #4CAF50;">送出安葬</button>
+            <button type="submit" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
         </form>
     </div>
 
-    <div id="loading">挖掘墳墓中，請稍候...</div>
+    <div id="loading">正在挖掘墳墓中...</div>
     
-    <!-- 墓碑顯示區 -->
-    <div class="graveyard" id="graveyard"></div>
+    <div class="graveyard-container">
+        <div class="graveyard" id="graveyard"></div>
+    </div>
 
     <script>
-        // 表單與資料庫設定
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1fNqY7jkBBoXbw5w0EqzzdvtPHI2vMfXX1Sk4co11SJ4/gviz/tq?tqx=out:csv';
         const FORM_POST_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdBGDmLWliwRJrslJ8QW4lOtQM7_6BOYJ7V0EWUlQ-RDcP0gQ/formResponse';
-        
-        // 使用您指定的圖片連結
         const TOMBSTONE_IMG = 'https://ppt.cc/f7qzyx@.png?1781582025';
 
         let deadPeople = [];
 
-        // 初始化：讀取資料
-        window.onload = async () => {
-            await fetchGraves();
-        };
+        window.onload = () => fetchGraves();
 
-        // 讀取 Google Sheet CSV 資料
         async function fetchGraves() {
             try {
                 const response = await fetch(SHEET_CSV_URL);
-                if (!response.ok) throw new Error('無法讀取試算表，請確認已「發佈到網路」');
+                if (!response.ok) throw new Error('讀取失敗');
                 const text = await response.text();
-                
                 deadPeople = parseCSV(text);
                 renderGraveyard(deadPeople);
             } catch (error) {
-                document.getElementById('loading').innerText = '讀取失敗：' + error.message;
+                document.getElementById('loading').innerText = '讀取失敗，請確認試算表已發佈為 CSV。';
             }
         }
 
-        // 簡易 CSV 解析器 (略過第一行標題)
         function parseCSV(csvText) {
             const lines = csvText.split('\n');
             const result = [];
-            // 假設欄位為: [0]時間戳記, [1]死者名稱, [2]死者ID, [3]死亡時間
             for (let i = 1; i < lines.length; i++) {
                 if (!lines[i].trim()) continue;
-                // 處理 CSV 雙引號問題
                 const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
                 const cleanData = row.map(val => val.replace(/^"|"$/g, '').replace(/""/g, '"'));
-                
                 result.push({
                     name: cleanData[1] || '無名氏',
-                    id: cleanData[2] || '未知ID',
+                    id: cleanData[2] || '未知',
                     date: cleanData[3] || '日期不詳'
                 });
             }
-            return result.reverse(); // 最新的在最前面
+            return result.reverse(); 
         }
 
-        // 渲染墓園
         function renderGraveyard(data) {
             const container = document.getElementById('graveyard');
             document.getElementById('loading').style.display = 'none';
             container.innerHTML = '';
 
-            if (data.length === 0) {
-                container.innerHTML = '<p style="grid-column: 1/-1;">目前還沒有罹難者資料。</p>';
-                return;
-            }
-
             data.forEach(person => {
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper';
+                // ID 直接顯示，不加「ID：」
                 grave.innerHTML = `
                     <img src="${TOMBSTONE_IMG}" alt="墓碑">
                     <div class="tombstone-text">
@@ -249,7 +208,6 @@
             });
         }
 
-        // 搜尋過濾功能
         function filterGraves() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const filtered = deadPeople.filter(p => 
@@ -259,13 +217,11 @@
             renderGraveyard(filtered);
         }
 
-        // 切換顯示登記表單
         function toggleRegisterForm() {
             const form = document.getElementById('register-form');
             form.style.display = form.style.display === 'block' ? 'none' : 'block';
         }
 
-        // 送出表單到 Google Forms
         async function submitForm(e) {
             e.preventDefault();
             const name = document.getElementById('entryName').value;
@@ -273,7 +229,7 @@
             const date = document.getElementById('entryDate').value;
             const btn = e.target.querySelector('button');
             
-            btn.innerText = '安葬中...';
+            btn.innerText = '處理中...';
             btn.disabled = true;
 
             const formData = new URLSearchParams();
@@ -282,7 +238,6 @@
             if (date) formData.append('entry.1128410849', date);
 
             try {
-                // Google Form 必須使用 no-cors，否則會被瀏覽器擋下
                 await fetch(FORM_POST_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -290,33 +245,20 @@
                     body: formData
                 });
 
-                alert('✅ 已成功立碑！(重新整理網頁後即可看到)');
-                e.target.reset();
-                toggleRegisterForm();
-                
-                // 模擬本機更新，不用等 Google Sheet 同步時間
-                deadPeople.unshift({ name, id, date: date || '日期不詳' });
-                filterGraves(); // 重新渲染
+                alert('✅ 資料已送出，安葬完成！');
+                location.reload(); 
             } catch (error) {
-                alert('發送失敗，請稍後再試。');
-            } finally {
-                btn.innerText = '送出安葬';
+                alert('系統錯誤，請稍後再試。');
                 btn.disabled = false;
+                btn.innerText = '確認送出安葬';
             }
         }
 
-        // 預防 XSS 攻擊
         function escapeHTML(str) {
             return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
             );
         }
     </script>
 </body>
-  </html>
+</html>
