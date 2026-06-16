@@ -18,10 +18,23 @@
             padding: 40px 20px;
             text-align: center;
         }
+        /* 封鎖畫面樣式 */
+        #blocked-screen {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: black;
+            color: red;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            font-size: 2rem;
+        }
+        
         h1 { margin-bottom: 10px; font-size: 2.5rem; }
         p.subtitle { color: #888; margin-bottom: 40px; font-size: 1.1rem; }
         
-        /* 控制面板 */
         .controls {
             margin-bottom: 50px;
             display: flex;
@@ -50,9 +63,7 @@
         }
         button:hover { background-color: #777; }
         button.btn-danger { background-color: #8b0000; }
-        button.btn-danger:hover { background-color: #aa0000; }
 
-        /* 登記死亡表單 */
         #register-form {
             display: none;
             background: #2a2a2a;
@@ -67,7 +78,6 @@
         #register-form label { display: block; margin-bottom: 5px; color: #ccc; }
         #register-form input { width: 100%; padding: 10px; box-sizing: border-box; background: #1a1a1a; border: 1px solid #444; color: white; }
 
-        /* 墓園區域：固定三欄 */
         .graveyard-container {
             width: 100%;
             display: flex;
@@ -80,24 +90,15 @@
             padding-bottom: 100px;
         }
 
-        /* 墓碑圖片與文字疊加 */
         .tombstone-wrapper {
             position: relative;
-            width: 100%;
             animation: fadeIn 0.8s ease-out;
         }
-        .tombstone-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
-        }
+        .tombstone-wrapper img { width: 100%; height: auto; display: block; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5)); }
         
         .tombstone-text {
             position: absolute;
-            top: 36%;
-            left: 15%;
-            right: 15%;
+            top: 36%; left: 15%; right: 15%;
             text-align: center;
             color: var(--stone-text);
             font-family: 'Times New Roman', 'Microsoft JhengHei', serif;
@@ -106,8 +107,8 @@
             text-shadow: 1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.4);
         }
         .tombstone-text .name { font-size: 1.4rem; margin-bottom: 10px; color: #222; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 10px; word-break: break-all; min-height: 1.2em; }
-        .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; color: #555; }
+        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 10px; word-break: break-all; }
+        .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         #loading { margin: 100px; font-size: 1.5rem; color: #666; }
@@ -115,69 +116,103 @@
 </head>
 <body>
 
-    <h1>🕊️ 2026 Meta 停權事件悼念區</h1>
-    <p class="subtitle">他們沒有違反社群守則，他們只是運氣不好。</p>
-
-    <div class="controls">
-        <input type="text" id="searchInput" placeholder="搜尋死者名稱或 ID..." onkeyup="filterGraves()">
-        <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記死亡</button>
+    <!-- 封鎖畫面 -->
+    <div id="blocked-screen">
+        <div>🚫 存取拒絕</div>
+        <div style="font-size: 1rem; margin-top: 20px; color: #666;">您的設備已被禁止進入此悼念區。</div>
     </div>
 
-    <div id="register-form">
-        <h3 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">通報罹難者</h3>
-        <form id="deathForm" onsubmit="submitForm(event)">
-            <div>
-                <label>死者名稱 *</label>
-                <input type="text" id="entryName" required placeholder="名稱">
-            </div>
-            <div>
-                <label>死者 ID *</label>
-                <input type="text" id="entryID" required placeholder="帳號 ID">
-            </div>
-            <div>
-                <label>死亡時間 (年-月-日)</label>
-                <input type="text" id="entryDate" placeholder="2026-06-15">
-            </div>
-            <button type="submit" id="submitBtn" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
-        </form>
-    </div>
+    <div id="main-content">
+        <h1>🕊️ 2026 Meta 停權事件悼念區</h1>
+        <p class="subtitle">他們沒有違反社群守則，他們只是運氣不好。</p>
 
-    <div id="loading">正在挖掘墳墓中...</div>
-    
-    <div class="graveyard-container">
-        <div class="graveyard" id="graveyard"></div>
+        <div class="controls">
+            <input type="text" id="searchInput" placeholder="搜尋死者名稱或 ID..." onkeyup="filterGraves()">
+            <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記死亡</button>
+        </div>
+
+        <div id="register-form">
+            <h3 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">通報罹難者</h3>
+            <form id="deathForm" onsubmit="submitForm(event)">
+                <div>
+                    <label>死者名稱 *</label>
+                    <input type="text" id="entryName" required>
+                </div>
+                <div>
+                    <label>死者 ID *</label>
+                    <input type="text" id="entryID" required>
+                </div>
+                <div>
+                    <label>死亡時間 (年-月-日)</label>
+                    <input type="text" id="entryDate" placeholder="2026-06-15">
+                </div>
+                <button type="submit" id="submitBtn" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
+            </form>
+        </div>
+
+        <div id="loading">正在載入名單...</div>
+        
+        <div class="graveyard-container">
+            <div class="graveyard" id="graveyard"></div>
+        </div>
     </div>
 
     <script>
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1fNqY7jkBBoXbw5w0EqzzdvtPHI2vMfXX1Sk4co11SJ4/gviz/tq?tqx=out:csv';
         const FORM_POST_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdBGDmLWliwRJrslJ8QW4lOtQM7_6BOYJ7V0EWUlQ-RDcP0gQ/formResponse';
-        
-        // 改為本地圖片路徑
         const TOMBSTONE_IMG = 'file_0000000012cc722fadf5374a54f461bd.png';
         const BANNED_WORDS_FILE = 'banned.txt';
+        const BLACKLIST_FILE = 'blacklist.txt';
 
         let deadPeople = [];
         let bannedWords = [];
+        let myUUID = "";
 
-        // 初始化
+        // 1. 初始化 UUID
+        function initUUID() {
+            let uuid = localStorage.getItem('meta_funeral_uuid');
+            if (!uuid) {
+                uuid = 'ID-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Date.now();
+                localStorage.setItem('meta_funeral_uuid', uuid);
+            }
+            myUUID = uuid;
+            console.log("Current UUID:", myUUID);
+        }
+
+        // 2. 檢查封鎖狀態
+        async function checkBlacklist() {
+            try {
+                const response = await fetch(BLACKLIST_FILE);
+                if (response.ok) {
+                    const text = await response.text();
+                    const blacklist = text.split('\n').map(u => u.trim());
+                    if (blacklist.includes(myUUID)) {
+                        document.getElementById('main-content').style.display = 'none';
+                        document.getElementById('blocked-screen').style.display = 'flex';
+                        return true; // 已被封鎖
+                    }
+                }
+            } catch (e) { console.log("No blacklist found."); }
+            return false;
+        }
+
         window.onload = async () => {
+            initUUID();
+            const isBlocked = await checkBlacklist();
+            if (isBlocked) return; // 停止後續載入
+
             await fetchBannedWords();
             await fetchGraves();
         };
 
-        // 讀取禁詞檔案
         async function fetchBannedWords() {
             try {
                 const response = await fetch(BANNED_WORDS_FILE);
                 if (response.ok) {
                     const text = await response.text();
-                    // 轉成陣列並去除空格
-                    bannedWords = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
-                    console.log('禁詞載入成功');
+                    bannedWords = text.split('\n').map(word => word.trim()).filter(w => w);
                 }
-            } catch (error) {
-                console.warn('找不到 banned.txt，將不會進行過濾。');
-            }
+            } catch (e) {}
         }
 
         async function fetchGraves() {
@@ -186,8 +221,8 @@
                 const text = await response.text();
                 deadPeople = parseCSV(text);
                 renderGraveyard(deadPeople);
-            } catch (error) {
-                document.getElementById('loading').innerText = '讀取失敗，請確認網路連線。';
+            } catch (e) {
+                document.getElementById('loading').innerText = '載入失敗。';
             }
         }
 
@@ -215,7 +250,7 @@
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper';
                 grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}" alt="墓碑">
+                    <img src="${TOMBSTONE_IMG}">
                     <div class="tombstone-text">
                         <div class="name">${escapeHTML(person.name)}</div>
                         <div class="id">${escapeHTML(person.id)}</div>
@@ -229,18 +264,16 @@
         function filterGraves() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
             const filtered = deadPeople.filter(p => 
-                p.name.toLowerCase().includes(keyword) || 
-                p.id.toLowerCase().includes(keyword)
+                p.name.toLowerCase().includes(keyword) || p.id.toLowerCase().includes(keyword)
             );
             renderGraveyard(filtered);
         }
 
         function toggleRegisterForm() {
             const form = document.getElementById('register-form');
-            form.style.display = form.style.display === 'block' ? 'none' : 'block';
+            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
         }
 
-        // 送出表單 (包含禁詞判斷)
         async function submitForm(e) {
             e.preventDefault();
             const name = document.getElementById('entryName').value;
@@ -248,28 +281,25 @@
             const date = document.getElementById('entryDate').value;
             const btn = document.getElementById('submitBtn');
             
-            // 檢查是否包含禁詞
             const fullContent = (name + id).toLowerCase();
             const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
 
-            btn.innerText = '處理中...';
+            btn.innerText = '安葬中...';
             btn.disabled = true;
 
             if (hasBannedWord) {
-                // [假動作]：模擬網路延遲，然後直接騙使用者成功
-                console.log('偵測到禁詞，啟動偽裝模式。');
                 setTimeout(() => {
                     alert('✅ 資料已送出，安葬完成！');
-                    location.reload(); // 重新整理後當然不會看到剛剛那一筆
-                }, 800);
+                    location.reload();
+                }, 1000);
                 return;
             }
 
-            // [真實動作]：發送資料
             const formData = new URLSearchParams();
             formData.append('entry.510043352', name);
             formData.append('entry.1259375546', id);
-            if (date) formData.append('entry.1128410849', date);
+            formData.append('entry.1128410849', date);
+            formData.append('entry.1443440662', myUUID); // 傳送 UUID
 
             try {
                 await fetch(FORM_POST_URL, {
@@ -281,16 +311,14 @@
                 alert('✅ 資料已送出，安葬完成！');
                 location.reload(); 
             } catch (error) {
-                alert('系統錯誤，請稍後再試。');
+                alert('發生錯誤。');
                 btn.disabled = false;
                 btn.innerText = '確認送出安葬';
             }
         }
 
         function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
-            );
+            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
         }
     </script>
 </body>
