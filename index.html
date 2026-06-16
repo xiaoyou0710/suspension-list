@@ -2,7 +2,6 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <!-- 強制設定網頁寬度，確保在手機上也能維持一排三個的電腦版格式 -->
     <meta name="viewport" content="width=1000">
     <title>2026 Meta 停權事件悼念區</title>
     <style>
@@ -68,15 +67,15 @@
         #register-form label { display: block; margin-bottom: 5px; color: #ccc; }
         #register-form input { width: 100%; padding: 10px; box-sizing: border-box; background: #1a1a1a; border: 1px solid #444; color: white; }
 
-        /* 墓園區域：固定三欄，寬度固定，居中顯示 */
+        /* 墓園區域：固定三欄 */
         .graveyard-container {
             width: 100%;
             display: flex;
-            justify-content: center; /* 左右留空的核心 */
+            justify-content: center;
         }
         .graveyard {
             display: grid;
-            grid-template-columns: repeat(3, 300px); /* 永遠一排三個，每個300px寬 */
+            grid-template-columns: repeat(3, 300px);
             gap: 40px;
             padding-bottom: 100px;
         }
@@ -96,7 +95,7 @@
         
         .tombstone-text {
             position: absolute;
-            top: 36%; /* 配合圖片中心位置 */
+            top: 36%;
             left: 15%;
             right: 15%;
             text-align: center;
@@ -124,23 +123,22 @@
         <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記死亡</button>
     </div>
 
-    <!-- 登記表單 -->
     <div id="register-form">
         <h3 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">通報罹難者</h3>
         <form id="deathForm" onsubmit="submitForm(event)">
             <div>
                 <label>死者名稱 *</label>
-                <input type="text" id="entryName" required placeholder="例如：王小明">
+                <input type="text" id="entryName" required placeholder="名稱">
             </div>
             <div>
                 <label>死者 ID *</label>
-                <input type="text" id="entryID" required placeholder="例如：xiaoming123">
+                <input type="text" id="entryID" required placeholder="帳號 ID">
             </div>
             <div>
                 <label>死亡時間 (年-月-日)</label>
                 <input type="text" id="entryDate" placeholder="2026-06-15">
             </div>
-            <button type="submit" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
+            <button type="submit" id="submitBtn" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
         </form>
     </div>
 
@@ -153,21 +151,43 @@
     <script>
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1fNqY7jkBBoXbw5w0EqzzdvtPHI2vMfXX1Sk4co11SJ4/gviz/tq?tqx=out:csv';
         const FORM_POST_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdBGDmLWliwRJrslJ8QW4lOtQM7_6BOYJ7V0EWUlQ-RDcP0gQ/formResponse';
+        
+        // 改為本地圖片路徑
         const TOMBSTONE_IMG = 'file_0000000012cc722fadf5374a54f461bd.png';
+        const BANNED_WORDS_FILE = 'banned.txt';
 
         let deadPeople = [];
+        let bannedWords = [];
 
-        window.onload = () => fetchGraves();
+        // 初始化
+        window.onload = async () => {
+            await fetchBannedWords();
+            await fetchGraves();
+        };
+
+        // 讀取禁詞檔案
+        async function fetchBannedWords() {
+            try {
+                const response = await fetch(BANNED_WORDS_FILE);
+                if (response.ok) {
+                    const text = await response.text();
+                    // 轉成陣列並去除空格
+                    bannedWords = text.split('\n').map(word => word.trim()).filter(word => word.length > 0);
+                    console.log('禁詞載入成功');
+                }
+            } catch (error) {
+                console.warn('找不到 banned.txt，將不會進行過濾。');
+            }
+        }
 
         async function fetchGraves() {
             try {
                 const response = await fetch(SHEET_CSV_URL);
-                if (!response.ok) throw new Error('讀取失敗');
                 const text = await response.text();
                 deadPeople = parseCSV(text);
                 renderGraveyard(deadPeople);
             } catch (error) {
-                document.getElementById('loading').innerText = '讀取失敗，請確認試算表已發佈為 CSV。';
+                document.getElementById('loading').innerText = '讀取失敗，請確認網路連線。';
             }
         }
 
@@ -191,11 +211,9 @@
             const container = document.getElementById('graveyard');
             document.getElementById('loading').style.display = 'none';
             container.innerHTML = '';
-
             data.forEach(person => {
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper';
-                // ID 直接顯示，不加「ID：」
                 grave.innerHTML = `
                     <img src="${TOMBSTONE_IMG}" alt="墓碑">
                     <div class="tombstone-text">
@@ -222,16 +240,32 @@
             form.style.display = form.style.display === 'block' ? 'none' : 'block';
         }
 
+        // 送出表單 (包含禁詞判斷)
         async function submitForm(e) {
             e.preventDefault();
             const name = document.getElementById('entryName').value;
             const id = document.getElementById('entryID').value;
             const date = document.getElementById('entryDate').value;
-            const btn = e.target.querySelector('button');
+            const btn = document.getElementById('submitBtn');
             
+            // 檢查是否包含禁詞
+            const fullContent = (name + id).toLowerCase();
+            const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
+
             btn.innerText = '處理中...';
             btn.disabled = true;
 
+            if (hasBannedWord) {
+                // [假動作]：模擬網路延遲，然後直接騙使用者成功
+                console.log('偵測到禁詞，啟動偽裝模式。');
+                setTimeout(() => {
+                    alert('✅ 資料已送出，安葬完成！');
+                    location.reload(); // 重新整理後當然不會看到剛剛那一筆
+                }, 800);
+                return;
+            }
+
+            // [真實動作]：發送資料
             const formData = new URLSearchParams();
             formData.append('entry.510043352', name);
             formData.append('entry.1259375546', id);
@@ -244,7 +278,6 @@
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData
                 });
-
                 alert('✅ 資料已送出，安葬完成！');
                 location.reload(); 
             } catch (error) {
