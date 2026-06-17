@@ -37,51 +37,57 @@
             letter-spacing: 5px;
         }
 
-        /* 頂部固定橫幅公告 - 修正圖片完整顯示 */
+        /* 頂部固定橫幅公告 - 修正不壓縮且留邊距 */
         #top-announcement-banner {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 70px; /* 略微增高以容納大文字與按鈕 */
+            top: 15px; /* 頂部留邊 */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 92%; /* 左右留邊 */
+            max-width: 1100px;
+            height: 75px; 
             background: url('image_1781679686462.jpeg') no-repeat center center;
-            background-size: 100% 100%; /* 強制完整顯示不裁切 */
+            background-size: contain; /* 防止圖片壓縮變形 */
             z-index: 900;
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            padding: 0 40px;
+            padding: 0 60px;
             box-sizing: border-box;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            pointer-events: none; /* 讓容器不擋點擊，內部元素再開啟 */
         }
         #top-announcement-banner p {
+            pointer-events: auto;
             color: #2a2a2a;
-            font-size: 1.1rem; /* 文字放大 */
+            font-size: 1.15rem; /* 文字略微放大 */
             font-weight: bold;
             margin: 0;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             font-family: 'Noto Serif TC', serif;
             flex-grow: 1;
             text-align: center;
+            white-space: nowrap;
         }
-        /* 橫幅內的顯示公告按鈕 */
         .reopen-btn {
-            background: rgba(0,0,0,0.1);
-            border: 1px dashed #555;
-            color: #333;
-            padding: 5px 12px;
-            font-size: 0.85rem;
+            pointer-events: auto;
+            background: rgba(0,0,0,0.15);
+            border: 1px solid rgba(0,0,0,0.3);
+            color: #222;
+            padding: 6px 15px;
+            font-size: 0.9rem;
             cursor: pointer;
             font-family: 'Noto Serif TC', serif;
-            border-radius: 3px;
+            border-radius: 4px;
             transition: 0.3s;
+            margin-left: 20px;
+            font-weight: bold;
         }
         .reopen-btn:hover {
-            background: rgba(0,0,0,0.2);
-            border-style: solid;
+            background: rgba(0,0,0,0.3);
+            color: #000;
         }
 
-        /* 大板子公告彈窗 - 修正文字寬度 */
+        /* 大板子公告彈窗 - 修正文字範圍介於 12% 與 22% 之間 */
         #announcement-overlay {
             display: none;
             position: fixed;
@@ -104,12 +110,12 @@
         .board-content {
             position: absolute;
             top: 36%;
-            left: 22%; /* 縮小寬度，避免壓到裝飾邊框 */
-            right: 22%; /* 縮小寬度，避免壓到裝飾邊框 */
+            left: 17.5%; /* 取中位數，避免太寬或太窄 */
+            right: 17.5%; 
             color: #222;
             font-family: 'Noto Serif TC', serif;
             font-size: 1.35rem;
-            line-height: 1.7;
+            line-height: 1.8;
             text-align: center;
             font-weight: bold;
             text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
@@ -131,10 +137,10 @@
             color: #fff;
         }
 
-        /* 英雄區塊修正 */
+        /* 英雄區塊 */
         header.hero {
             background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 160px 20px 40px 20px; /* 增加頂部間距避開橫幅 */
+            padding: 160px 20px 40px 20px; 
             border-bottom: 1px solid #222;
         }
 
@@ -197,7 +203,6 @@
 </head>
 <body>
 
-    <!-- 封鎖畫面 -->
     <div id="blocked-screen">
         <div>ACCESS DENIED</div>
         <div style="font-size: 1rem; margin-top: 20px; color: #444;">您的設備已被禁止進入。</div>
@@ -262,15 +267,13 @@
         let myUUID = "";
         let myIP = "";
 
-        // 顯示大板子
         function openBoard() {
             document.getElementById('announcement-overlay').style.display = 'flex';
         }
 
-        // 關閉大板子並紀錄
         function closeBoard() {
             document.getElementById('announcement-overlay').style.display = 'none';
-            localStorage.setItem('announcement_closed_v2', 'true');
+            localStorage.setItem('announcement_closed_v3', 'true');
         }
 
         async function initIdentity() {
@@ -300,8 +303,7 @@
         }
 
         window.onload = async () => {
-            // 初次進入檢查
-            if (localStorage.getItem('announcement_closed_v2') !== 'true') {
+            if (localStorage.getItem('announcement_closed_v3') !== 'true') {
                 openBoard();
             }
 
@@ -314,7 +316,7 @@
         async function fetchBannedWords() {
             const res = await fetch(BANNED_WORDS_FILE).catch(() => null);
             if (res && res.ok) {
-                const text = await response.text(); // 修正變數參考
+                const text = await res.text();
                 bannedWords = text.split('\n').map(w => w.trim()).filter(w => w);
             }
         }
@@ -360,7 +362,7 @@
                     </div>
                 `;
                 container.appendChild(grave);
-                setTimeout(() => { grave.classList.add('show'); }, i * 80); 
+                setTimeout(() => { grave.classList.add('show'); }, i * 60); 
             }
         }
 
