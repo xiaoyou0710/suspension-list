@@ -37,22 +37,23 @@
             letter-spacing: 5px;
         }
 
-        /* 頂部固定橫幅公告 - 修正：等比例放大、不壓縮、近滿版 */
+        /* 頂部固定橫幅公告 - 修正處：改為原圖比例，防止壓縮變形 */
         #top-announcement-banner {
             position: fixed;
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 96%; /* 只比螢幕寬小一點 */
+            width: 96%;
             max-width: 1200px;
-            aspect-ratio: 12 / 1; /* 依據長條石磚比例設定 */
+            /* 使用原圖比例 (約 7.38:1) 確保不被壓扁 */
+            aspect-ratio: 1152 / 156; 
             background: url('image_1781679686462.jpeg') no-repeat center center;
-            background-size: 100% 100%; /* 強制填滿容器，搭配 aspect-ratio 達成等比例 */
+            background-size: contain; /* 關鍵：維持原始比例縮放 */
             z-index: 900;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 5%;
+            padding: 0 8%; /* 增加內距，確保文字待在石磚邊框內 */
             box-sizing: border-box;
             box-shadow: 0 8px 20px rgba(0,0,0,0.6);
             pointer-events: none; /* 穿透點擊 */
@@ -60,26 +61,30 @@
         #top-announcement-banner p {
             pointer-events: auto;
             color: #1a1a1a;
-            font-size: 1.25rem; /* 文字放大 */
+            font-size: 1.25rem;
             font-weight: bold;
             margin: 0;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             font-family: 'Noto Serif TC', serif;
             flex-grow: 1;
             text-align: center;
+            /* 防止文字溢出 */
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
         .reopen-btn {
             pointer-events: auto;
             background: rgba(0,0,0,0.1);
             border: 1px solid rgba(0,0,0,0.2);
             color: #333;
-            padding: 8px 18px;
-            font-size: 0.95rem;
+            padding: 6px 15px;
+            font-size: 0.9rem;
             cursor: pointer;
             font-family: 'Noto Serif TC', serif;
             border-radius: 4px;
             transition: 0.3s;
-            margin-left: 20px;
+            margin-left: 15px;
             white-space: nowrap;
             font-weight: bold;
         }
@@ -89,7 +94,7 @@
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
-        /* 大板子公告彈窗 - 文字範圍介於 12% 與 22% 之間 */
+        /* 大板子公告彈窗 */
         #announcement-overlay {
             display: none;
             position: fixed;
@@ -112,7 +117,7 @@
         .board-content {
             position: absolute;
             top: 36%;
-            left: 17.5%; /* 精準修正：介於舊版 12% 與新版 22% 之間 */
+            left: 17.5%;
             right: 17.5%; 
             color: #222;
             font-family: 'Noto Serif TC', serif;
@@ -136,10 +141,10 @@
         }
         .close-board-btn:hover { background: #111; color: #fff; }
 
-        /* 英雄區塊 - 加大間距以容納更厚實的橫幅 */
+        /* 英雄區塊 */
         header.hero {
             background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 180px 20px 40px 20px; 
+            padding: 200px 20px 40px 20px; /* 稍微增加頂部間距以配合變厚的橫幅 */
             border-bottom: 1px solid #222;
         }
 
