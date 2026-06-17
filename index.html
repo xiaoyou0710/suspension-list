@@ -22,6 +22,7 @@
             text-align: center;
         }
 
+        /* 封鎖畫面 */
         #blocked-screen {
             display: none;
             position: fixed;
@@ -36,9 +37,84 @@
             letter-spacing: 5px;
         }
 
+        /* 頂部固定橫幅公告 */
+        #top-announcement-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: url('image_1781679686462.jpeg') no-repeat center center;
+            background-size: cover;
+            z-index: 900;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+        }
+        #top-announcement-banner p {
+            color: #444;
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin: 0;
+            padding: 0 20px;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.2);
+            font-family: 'Noto Serif TC', serif;
+        }
+
+        /* 大板子公告彈窗 */
+        #announcement-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        .announcement-board {
+            position: relative;
+            width: 800px;
+            animation: boardIn 0.8s ease-out;
+        }
+        .announcement-board img {
+            width: 100%;
+            display: block;
+            filter: drop-shadow(0 0 30px rgba(0,0,0,1));
+        }
+        .board-content {
+            position: absolute;
+            top: 35%;
+            left: 12%;
+            right: 12%;
+            color: #333;
+            font-family: 'Noto Serif TC', serif;
+            font-size: 1.3rem;
+            line-height: 1.8;
+            text-align: center;
+            font-weight: bold;
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+        }
+        .close-board-btn {
+            margin-top: 30px;
+            padding: 10px 40px;
+            background: #444;
+            color: #ccc;
+            border: 1px solid #555;
+            cursor: pointer;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .close-board-btn:hover {
+            background: #222;
+            color: #fff;
+        }
+
+        /* 英雄區塊修正 (增加 padding-top 避開頂部橫幅) */
         header.hero {
             background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 80px 20px 40px 20px;
+            padding: 140px 20px 40px 20px;
             border-bottom: 1px solid #222;
         }
 
@@ -48,37 +124,12 @@
             margin: 0;
             color: #eee;
             letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255,255,255,0.1);
         }
 
-        .owner-tag {
-            margin-top: 18px;
-            font-size: 1rem;
-            color: #bbb;
-            letter-spacing: 1px;
-        }
+        .owner-tag { margin-top: 18px; font-size: 1rem; color: #bbb; }
+        .owner-tag a { color: #fff; text-decoration: none; font-weight: bold; border-bottom: 1px solid #666; }
 
-        .owner-tag a {
-            color: #fff;
-            text-decoration: none;
-            font-weight: bold;
-            border-bottom: 1px solid #666;
-            transition: 0.3s;
-        }
-
-        .owner-tag a:hover {
-            color: #ff4444;
-            border-bottom-color: #ff4444;
-        }
-
-        .subtitle {
-            color: #666;
-            font-style: italic;
-            margin: 25px auto;
-            max-width: 600px;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+        .subtitle { color: #666; font-style: italic; margin: 25px auto; max-width: 600px; font-size: 1.1rem; }
 
         .victim-counter {
             background: rgba(255,255,255,0.05);
@@ -91,110 +142,62 @@
             margin-bottom: 20px;
         }
 
-        #victim-count {
-            color: #fff;
-            font-weight: bold;
-            margin: 0 5px;
-            font-size: 1.1rem;
-        }
-
-        .controls {
-            margin: 40px auto;
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-        }
-
-        input[type="text"] {
-            padding: 12px 25px;
-            border-radius: 30px;
-            border: 1px solid #444;
-            background: #111;
-            color: #fff;
-            font-size: 16px;
-            width: 350px;
-            outline: none;
-        }
-
-        button {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 30px;
-            background-color: #333;
-            color: #ccc;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
+        .controls { margin: 40px auto; display: flex; gap: 15px; justify-content: center; }
+        input[type="text"] { padding: 12px 25px; border-radius: 30px; border: 1px solid #444; background: #111; color: #fff; width: 350px; }
+        button { padding: 12px 30px; border-radius: 30px; border: none; background-color: #333; color: #ccc; cursor: pointer; transition: 0.3s; }
         button.btn-danger { background-color: var(--accent-color); color: #fff; }
 
-        #register-form {
-            display: none;
-            background: #151515;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 450px;
-            margin: 0 auto 50px auto;
-            text-align: left;
-            border: 1px solid #222;
-        }
+        #register-form { display: none; background: #151515; padding: 30px; border-radius: 15px; max-width: 450px; margin: 0 auto 50px auto; text-align: left; border: 1px solid #222; }
 
-        .graveyard-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-        }
-        .graveyard {
-            display: grid;
-            grid-template-columns: repeat(3, 300px);
-            gap: 50px;
-            padding: 20px 0 100px 0;
-        }
+        .graveyard-container { width: 100%; display: flex; justify-content: center; }
+        .graveyard { display: grid; grid-template-columns: repeat(3, 300px); gap: 50px; padding: 20px 0 100px 0; }
 
         .tombstone-wrapper {
             position: relative;
             width: 100%;
-            opacity: 0; /* 預設隱藏，由 JS 控制顯示 */
+            opacity: 0;
             transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
-        
-        .tombstone-wrapper.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .tombstone-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: grayscale(0.2) drop-shadow(0 10px 30px rgba(0,0,0,0.8));
-        }
+        .tombstone-wrapper.show { opacity: 1; transform: translateY(0); }
+        .tombstone-wrapper img { width: 100%; filter: grayscale(0.2) drop-shadow(0 10px 30px rgba(0,0,0,0.8)); }
         
         .tombstone-text {
-            position: absolute;
-            top: 36%; left: 15%; right: 15%;
-            text-align: center;
-            color: var(--stone-text);
-            font-family: 'Noto Serif TC', serif;
-            font-weight: bold;
-            pointer-events: none;
+            position: absolute; top: 36%; left: 15%; right: 15%; text-align: center; color: var(--stone-text);
+            font-family: 'Noto Serif TC', serif; font-weight: bold; pointer-events: none;
             text-shadow: 1px 1px 0px rgba(255,255,255,0.15), -1px -1px 0px rgba(0,0,0,0.3);
         }
         .tombstone-text .name { font-size: 1.4rem; margin-bottom: 12px; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 12px; word-break: break-all; min-height: 1.2em; color: #3a3a3a; }
+        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 12px; color: #3a3a3a; }
         .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; color: #555; }
 
+        @keyframes boardIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
         #loading { margin: 100px; font-size: 1.2rem; color: #444; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
+    <!-- 封鎖畫面 -->
     <div id="blocked-screen">
         <div>ACCESS DENIED</div>
         <div style="font-size: 1rem; margin-top: 20px; color: #444;">您的設備已被禁止進入。</div>
+    </div>
+
+    <!-- 頂部橫幅公告 -->
+    <div id="top-announcement-banner">
+        <p>死者復甦警告：部分靈魂已成功還陽，請查看電子郵件確認帳號狀態。</p>
+    </div>
+
+    <!-- 大板子公告彈窗 -->
+    <div id="announcement-overlay">
+        <div class="announcement-board">
+            <img src="4123fdf08dde0d0eca7ff38985ab9eb2e9f3e4c21ca643543288b0bd5e73f894.png">
+            <div class="board-content">
+                經 Meta 判官重新審閱冥府死籍，部分靈魂被判定命不該絕。目前已有多位死者成功「復甦」並移出本公墓。請死者查看電子郵件信箱以確認帳號狀態。
+                <br>
+                <button class="close-board-btn" onclick="closeBoard()">遵旨 / 關閉公告</button>
+            </div>
+        </div>
     </div>
 
     <div id="main-content">
@@ -238,7 +241,12 @@
         let myUUID = "";
         let myIP = "";
 
-        // 1. 初始化 UUID 與 IP (並行執行)
+        // 關閉大板子公告並儲存紀錄
+        function closeBoard() {
+            document.getElementById('announcement-overlay').style.display = 'none';
+            localStorage.setItem('announcement_closed', 'true');
+        }
+
         async function initIdentity() {
             let uuid = localStorage.getItem('meta_funeral_uuid');
             if (!uuid) {
@@ -246,15 +254,9 @@
                 localStorage.setItem('meta_funeral_uuid', uuid);
             }
             myUUID = uuid;
-
-            // 這裡不再等待，讓它跟其他任務並行
-            return fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => { myIP = data.ip; })
-                .catch(() => { myIP = "UNKNOWN"; });
+            return fetch('https://api.ipify.org?format=json').then(res => res.json()).then(data => { myIP = data.ip; }).catch(() => { myIP = "UNKNOWN"; });
         }
 
-        // 2. 檢查黑名單
         async function checkBlacklist() {
             try {
                 const response = await fetch(BLACKLIST_FILE + '?t=' + Date.now());
@@ -272,19 +274,15 @@
         }
 
         window.onload = async () => {
-            // 優化：並行執行所有前置任務
-            const [idTask, blackListBlocked] = await Promise.all([
-                initIdentity(),
-                checkBlacklist()
-            ]);
+            // 公告邏輯：檢查是否已關閉過
+            if (localStorage.getItem('announcement_closed') !== 'true') {
+                document.getElementById('announcement-overlay').style.display = 'flex';
+            }
 
+            const [idTask, blackListBlocked] = await Promise.all([initIdentity(), checkBlacklist()]);
             if (blackListBlocked) return;
 
-            // 繼續並行抓取資料
-            Promise.all([
-                fetchBannedWords(),
-                fetchGraves()
-            ]);
+            Promise.all([fetchBannedWords(), fetchGraves()]);
         };
 
         async function fetchBannedWords() {
@@ -319,13 +317,10 @@
             return result.reverse(); 
         }
 
-        // 悠閒載入核心邏輯
         async function renderGraveyard(data) {
             const container = document.getElementById('graveyard');
             document.getElementById('loading').style.display = 'none';
             container.innerHTML = '';
-            
-            // 使用 for 迴圈配合 await 實現「接力式」顯現
             for (let i = 0; i < data.length; i++) {
                 const person = data[i];
                 const grave = document.createElement('div');
@@ -339,441 +334,13 @@
                     </div>
                 `;
                 container.appendChild(grave);
-                
-                // 每個墓碑間隔 80 毫秒顯現
-                setTimeout(() => {
-                    grave.classList.add('show');
-                }, i * 80); 
+                setTimeout(() => { grave.classList.add('show'); }, i * 80); 
             }
         }
 
         function filterGraves() {
             const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = deadPeople.filter(p => 
-                (p.name && p.name.toLowerCase().includes(keyword)) || 
-                (p.id && p.id.toLowerCase().includes(keyword))
-            );
-            // 搜尋時不使用延遲顯現，方便快速查看
-            const container = document.getElementById('graveyard');
-            container.innerHTML = '';
-            filtered.forEach(person => {
-                const grave = document.createElement('div');
-                grave.className = 'tombstone-wrapper show'; // 直接顯示
-                grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}">
-                    <div class="tombstone-text">
-                        <div class="name">${escapeHTML(person.name || '無名氏')}</div>
-                        <div class="id">${escapeHTML(person.id || '未知')}</div>
-                        <div class="date">${escapeHTML(person.date || '日期不詳')}</div>
-                    </div>
-                `;
-                container.appendChild(grave);
-            });
-        }
-
-        function toggleRegisterForm() {
-            const form = document.getElementById('register-form');
-            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
-        }
-
-        async function submitForm(e) {
-            e.preventDefault();
-            const name = document.getElementById('entryName').value;
-            const id = document.getElementById('entryID').value;
-            const date = document.getElementById('entryDate').value;
-            const btn = document.getElementById('submitBtn');
-            
-            const fullContent = (name + id).toLowerCase();
-            const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
-
-            btn.innerText = '安葬中...';
-            btn.disabled = true;
-
-            if (hasBannedWord) {
-                setTimeout(() => { alert('✅ 資料已送出，安葬完成！'); location.reload(); }, 1000);
-                return;
-            }
-
-            const formData = new URLSearchParams();
-            formData.append('entry.510043352', name);
-            formData.append('entry.1259375546', id);
-            formData.append('entry.1128410849', date);
-            formData.append('entry.1443440662', myUUID);
-            formData.append('entry.766832530', myIP);
-
-            try {
-                await fetch(FORM_POST_URL, { method: 'POST', mode: 'no-cors', body: formData });
-                alert('✅ 資料已送出，安葬完成！');
-                location.reload(); 
-            } catch (error) {
-                alert('系統忙碌中。');
-                btn.disabled = false;
-                btn.innerText = '確認送出安葬';
-            }
-        }
-
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
-        }
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=1000">
-    <title>2026 Meta大屠殺事件受害者公墓</title>
-    <!-- 引入襯線字體 -->
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #0a0a0a;
-            --text-color: #d0d0d0;
-            --accent-color: #8b0000;
-            --stone-text: #3a3a3a; 
-        }
-        
-        body {
-            font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            text-align: center;
-            overflow-x: hidden;
-        }
-
-        /* 第一次進入的彈出公告 (大板子) */
-        #splash-overlay {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
-            z-index: 30000;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        #splash-box {
-            position: relative;
-            width: 900px; /* 依照原圖比例調整 */
-            height: 600px;
-            background: url('4123fdf08dde0d0eca7ff38985ab9eb2e9f3e4c21ca643543288b0bd5e73f894.png') no-repeat center center;
-            background-size: contain;
-            animation: modalFadeIn 0.6s ease-out;
-        }
-        #splash-content {
-            position: absolute;
-            top: 32%; left: 15%; right: 15%; bottom: 18%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--stone-text);
-            font-family: 'Noto Serif TC', serif;
-            font-size: 1.6rem;
-            line-height: 1.8;
-            font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.2);
-        }
-
-        /* 置頂長條橫幅公告 */
-        #top-announcement-banner {
-            width: 100%;
-            height: 140px;
-            background: url('image_1781679686462.jpeg') no-repeat center center;
-            background-size: cover;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-bottom: 2px solid #000;
-            position: relative;
-            z-index: 1000;
-        }
-        #banner-text {
-            width: 85%;
-            color: #444;
-            font-family: 'Noto Serif TC', serif;
-            font-size: 1.15rem;
-            font-weight: bold;
-            line-height: 1.5;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.1);
-        }
-
-        /* 封鎖畫面 */
-        #blocked-screen {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: black;
-            color: var(--accent-color);
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 50000;
-            font-size: 2.5rem;
-            letter-spacing: 5px;
-        }
-
-        header.hero {
-            background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 60px 20px 40px 20px;
-            border-bottom: 1px solid #222;
-        }
-
-        h1 {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 3.5rem;
-            margin: 0;
-            color: #eee;
-            letter-spacing: 2px;
-            text-shadow: 0 0 15px rgba(255,255,255,0.1);
-        }
-
-        .owner-tag { margin-top: 18px; font-size: 1rem; color: #bbb; letter-spacing: 1px; }
-        .owner-tag a { color: #fff; text-decoration: none; font-weight: bold; border-bottom: 1px solid #666; transition: 0.3s; }
-        .owner-tag a:hover { color: #ff4444; border-bottom-color: #ff4444; }
-
-        .victim-counter {
-            background: rgba(255,255,255,0.05);
-            display: inline-block;
-            padding: 10px 30px;
-            border-radius: 50px;
-            border: 1px solid #333;
-            font-size: 0.95rem;
-            color: #aaa;
-            margin: 20px 0;
-        }
-        #victim-count { color: #fff; font-weight: bold; font-size: 1.1rem; }
-
-        .controls { margin: 40px auto; display: flex; gap: 15px; justify-content: center; align-items: center; }
-        input[type="text"] { padding: 12px 25px; border-radius: 30px; border: 1px solid #444; background: #111; color: #fff; font-size: 16px; width: 350px; outline: none; }
-        button { padding: 12px 30px; border: none; border-radius: 30px; background-color: #333; color: #ccc; cursor: pointer; font-size: 16px; transition: 0.3s; }
-        button.btn-danger { background-color: var(--accent-color); color: #fff; }
-
-        #register-form { display: none; background: #151515; padding: 30px; border-radius: 15px; max-width: 450px; margin: 0 auto 50px auto; text-align: left; border: 1px solid #222; }
-
-        .graveyard-container { width: 100%; display: flex; justify-content: center; }
-        .graveyard { display: grid; grid-template-columns: repeat(3, 300px); gap: 50px; padding: 20px 0 100px 0; }
-
-        .tombstone-wrapper {
-            position: relative;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .tombstone-wrapper.show { opacity: 1; transform: translateY(0); }
-        .tombstone-wrapper img { width: 100%; height: auto; display: block; filter: grayscale(0.2) drop-shadow(0 10px 30px rgba(0,0,0,0.8)); }
-        
-        .tombstone-text {
-            position: absolute;
-            top: 36%; left: 15%; right: 15%;
-            text-align: center;
-            color: var(--stone-text);
-            font-family: 'Noto Serif TC', serif;
-            font-weight: bold;
-            pointer-events: none;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.15), -1px -1px 0px rgba(0,0,0,0.3);
-        }
-        .tombstone-text .name { font-size: 1.4rem; margin-bottom: 12px; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 12px; word-break: break-all; min-height: 1.2em; color: #3a3a3a; }
-        .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; color: #555; }
-
-        @keyframes modalFadeIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-        #loading { margin: 100px; font-size: 1.2rem; color: #444; letter-spacing: 2px; }
-    </style>
-</head>
-<body>
-
-    <!-- 第一次進入的彈出大板子公告 -->
-    <div id="splash-overlay" onclick="closeSplash()">
-        <div id="splash-box">
-            <div id="splash-content">
-                經 Meta 判官重新審閱冥府死籍，部分靈魂被判定命不該絕。目前已有多位死者成功「復甦」並移出本公墓。請死者查看電子郵件信箱以確認帳號狀態。
-            </div>
-        </div>
-    </div>
-
-    <!-- 封鎖畫面 -->
-    <div id="blocked-screen">
-        <div>ACCESS DENIED</div>
-        <div style="font-size: 1rem; margin-top: 20px; color: #444;">您的設備已被禁止進入。</div>
-    </div>
-
-    <!-- 置頂長條橫幅公告 -->
-    <div id="top-announcement-banner">
-        <div id="banner-text">
-            經 Meta 判官重新審閱冥府死籍，部分靈魂被判定命不該絕。目前已有多位死者成功「復甦」並移出本公墓。請死者查看電子郵件信箱以確認帳號狀態。
-        </div>
-    </div>
-
-    <div id="main-content">
-        <header class="hero">
-            <h1>2026 Meta大屠殺事件受害者公墓</h1>
-            <p class="owner-tag">由 <a href="https://www.threads.net/@iam.xiaoyou" target="_blank">@iam.xiaoyou</a> 建立與維護</p>
-            <div class="victim-counter">
-                目前已有 <span id="victim-count">...</span> 位數位靈魂在此長眠
-            </div>
-        </header>
-
-        <div class="controls">
-            <input type="text" id="searchInput" placeholder="搜尋姓名或 ID..." onkeyup="filterGraves()">
-            <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記新罹難者</button>
-        </div>
-
-        <div id="register-form">
-            <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px;">通報罹難者</h3>
-            <form id="deathForm" onsubmit="submitForm(event)">
-                <div><label>死者名稱 *</label><input type="text" id="entryName" required></div>
-                <div><label>死者 ID *</label><input type="text" id="entryID" required></div>
-                <div><label>死亡時間</label><input type="text" id="entryDate" placeholder="2026-06-17"></div>
-                <button type="submit" id="submitBtn" style="width: 100%; background-color: #8b0000; font-weight: bold; color: white;">確認送出安葬</button>
-            </form>
-        </div>
-
-        <div id="loading">正在開啟公墓大門...</div>
-        <div class="graveyard-container"><div class="graveyard" id="graveyard"></div></div>
-    </div>
-
-    <script>
-        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/1fNqY7jkBBoXbw5w0EqzzdvtPHI2vMfXX1Sk4co11SJ4/gviz/tq?tqx=out:csv';
-        const FORM_POST_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdBGDmLWliwRJrslJ8QW4lOtQM7_6BOYJ7V0EWUlQ-RDcP0gQ/formResponse';
-        
-        // 正確的圖片檔名
-        const TOMBSTONE_IMG = 'file_0000000012cc722fadf5374a54f461bd.png';
-        const BANNED_WORDS_FILE = 'banned.txt';
-        const BLACKLIST_FILE = '98d2d524-9735-4c1d-a2a2-66b266d88257.txt';
-
-        let deadPeople = [];
-        let bannedWords = [];
-        let myUUID = "";
-        let myIP = "";
-
-        // 公告邏輯 (Session 級別，關閉分頁後重開會再顯示)
-        function handleSplash() {
-            if (!sessionStorage.getItem('meta_vis_ann')) {
-                document.getElementById('splash-overlay').style.display = 'flex';
-                document.body.style.overflow = 'hidden';
-            }
-        }
-
-        function closeSplash() {
-            document.getElementById('splash-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-            sessionStorage.setItem('meta_vis_ann', 'true');
-        }
-
-        async function initIdentity() {
-            let uuid = localStorage.getItem('meta_funeral_uuid');
-            if (!uuid) {
-                uuid = 'ID-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Date.now();
-                localStorage.setItem('meta_funeral_uuid', uuid);
-            }
-            myUUID = uuid;
-
-            return fetch('https://api.ipify.org?format=json')
-                .then(res => res.json())
-                .then(data => { myIP = data.ip; })
-                .catch(() => { myIP = "UNKNOWN"; });
-        }
-
-        async function checkBlacklist() {
-            try {
-                const response = await fetch(BLACKLIST_FILE + '?t=' + Date.now());
-                if (response.ok) {
-                    const text = await response.text();
-                    const list = text.split('\n').map(i => i.trim()).filter(i => i);
-                    if (list.includes(myUUID) || list.includes(myIP)) {
-                        document.getElementById('main-content').style.display = 'none';
-                        document.getElementById('blocked-screen').style.display = 'flex';
-                        return true;
-                    }
-                }
-            } catch (e) {}
-            return false;
-        }
-
-        window.onload = async () => {
-            handleSplash(); 
-
-            const [idTask, blocked] = await Promise.all([
-                initIdentity(),
-                checkBlacklist()
-            ]);
-
-            if (blocked) return;
-
-            Promise.all([
-                fetchBannedWords(),
-                fetchGraves()
-            ]);
-        };
-
-        async function fetchBannedWords() {
-            const res = await fetch(BANNED_WORDS_FILE).catch(() => null);
-            if (res && res.ok) {
-                const text = await res.text();
-                bannedWords = text.split('\n').map(w => w.trim()).filter(w => w);
-            }
-        }
-
-        async function fetchGraves() {
-            try {
-                const response = await fetch(SHEET_CSV_URL);
-                const text = await response.text();
-                deadPeople = parseCSV(text);
-                document.getElementById('victim-count').innerText = deadPeople.length;
-                renderGraveyard(deadPeople);
-            } catch (e) {
-                document.getElementById('loading').innerText = '公墓資料讀取失敗。';
-            }
-        }
-
-        function parseCSV(csvText) {
-            const lines = csvText.split('\n');
-            const result = [];
-            for (let i = 1; i < lines.length; i++) {
-                if (!lines[i].trim()) continue;
-                const row = lines[i].match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || [];
-                const cleanData = row.map(val => val.replace(/^"|"$/g, '').replace(/""/g, '"'));
-                result.push({ name: cleanData[1], id: cleanData[2], date: cleanData[3] });
-            }
-            return result.reverse(); 
-        }
-
-        // 悠閒載入墓碑
-        async function renderGraveyard(data) {
-            const container = document.getElementById('graveyard');
-            document.getElementById('loading').style.display = 'none';
-            container.innerHTML = '';
-            
-            for (let i = 0; i < data.length; i++) {
-                const person = data[i];
-                const grave = document.createElement('div');
-                grave.className = 'tombstone-wrapper';
-                grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}" loading="lazy">
-                    <div class="tombstone-text">
-                        <div class="name">${escapeHTML(person.name || '無名氏')}</div>
-                        <div class="id">${escapeHTML(person.id || '未知')}</div>
-                        <div class="date">${escapeHTML(person.date || '日期不詳')}</div>
-                    </div>
-                `;
-                container.appendChild(grave);
-                setTimeout(() => {
-                    grave.classList.add('show');
-                }, i * 80); 
-            }
-        }
-
-        function filterGraves() {
-            const keyword = document.getElementById('searchInput').value.toLowerCase();
-            const filtered = deadPeople.filter(p => 
-                (p.name && p.name.toLowerCase().includes(keyword)) || 
-                (p.id && p.id.toLowerCase().includes(keyword))
-            );
+            const filtered = deadPeople.filter(p => (p.name && p.name.toLowerCase().includes(keyword)) || (p.id && p.id.toLowerCase().includes(keyword)));
             const container = document.getElementById('graveyard');
             container.innerHTML = '';
             filtered.forEach(person => {
@@ -802,25 +369,20 @@
             const id = document.getElementById('entryID').value;
             const date = document.getElementById('entryDate').value;
             const btn = document.getElementById('submitBtn');
-            
             const fullContent = (name + id).toLowerCase();
             const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
-
             btn.innerText = '安葬中...';
             btn.disabled = true;
-
             if (hasBannedWord) {
                 setTimeout(() => { alert('✅ 資料已送出，安葬完成！'); location.reload(); }, 1000);
                 return;
             }
-
             const formData = new URLSearchParams();
             formData.append('entry.510043352', name);
             formData.append('entry.1259375546', id);
             formData.append('entry.1128410849', date);
             formData.append('entry.1443440662', myUUID);
             formData.append('entry.766832530', myIP);
-
             try {
                 await fetch(FORM_POST_URL, { method: 'POST', mode: 'no-cors', body: formData });
                 alert('✅ 資料已送出，安葬完成！');
