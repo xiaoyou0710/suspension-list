@@ -37,32 +37,51 @@
             letter-spacing: 5px;
         }
 
-        /* 頂部固定橫幅公告 */
+        /* 頂部固定橫幅公告 - 修正圖片完整顯示 */
         #top-announcement-banner {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            height: 60px;
+            height: 70px; /* 略微增高以容納大文字與按鈕 */
             background: url('image_1781679686462.jpeg') no-repeat center center;
-            background-size: cover;
+            background-size: 100% 100%; /* 強制完整顯示不裁切 */
             z-index: 900;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
+            padding: 0 40px;
+            box-sizing: border-box;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
         }
         #top-announcement-banner p {
-            color: #444;
-            font-size: 0.95rem;
+            color: #2a2a2a;
+            font-size: 1.1rem; /* 文字放大 */
             font-weight: bold;
             margin: 0;
-            padding: 0 20px;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.2);
+            text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             font-family: 'Noto Serif TC', serif;
+            flex-grow: 1;
+            text-align: center;
+        }
+        /* 橫幅內的顯示公告按鈕 */
+        .reopen-btn {
+            background: rgba(0,0,0,0.1);
+            border: 1px dashed #555;
+            color: #333;
+            padding: 5px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            font-family: 'Noto Serif TC', serif;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+        .reopen-btn:hover {
+            background: rgba(0,0,0,0.2);
+            border-style: solid;
         }
 
-        /* 大板子公告彈窗 */
+        /* 大板子公告彈窗 - 修正文字寬度 */
         #announcement-overlay {
             display: none;
             position: fixed;
@@ -74,47 +93,48 @@
         }
         .announcement-board {
             position: relative;
-            width: 800px;
+            width: 850px;
             animation: boardIn 0.8s ease-out;
         }
         .announcement-board img {
             width: 100%;
             display: block;
-            filter: drop-shadow(0 0 30px rgba(0,0,0,1));
+            filter: drop-shadow(0 0 40px rgba(0,0,0,1));
         }
         .board-content {
             position: absolute;
-            top: 35%;
-            left: 12%;
-            right: 12%;
-            color: #333;
+            top: 36%;
+            left: 22%; /* 縮小寬度，避免壓到裝飾邊框 */
+            right: 22%; /* 縮小寬度，避免壓到裝飾邊框 */
+            color: #222;
             font-family: 'Noto Serif TC', serif;
-            font-size: 1.3rem;
-            line-height: 1.8;
+            font-size: 1.35rem;
+            line-height: 1.7;
             text-align: center;
             font-weight: bold;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.3);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.4);
         }
         .close-board-btn {
-            margin-top: 30px;
-            padding: 10px 40px;
-            background: #444;
-            color: #ccc;
+            margin-top: 35px;
+            padding: 10px 45px;
+            background: #3a3a3a;
+            color: #eee;
             border: 1px solid #555;
             cursor: pointer;
             font-size: 1.1rem;
+            font-family: 'Noto Serif TC', serif;
             border-radius: 5px;
             transition: 0.3s;
         }
         .close-board-btn:hover {
-            background: #222;
+            background: #111;
             color: #fff;
         }
 
-        /* 英雄區塊修正 (增加 padding-top 避開頂部橫幅) */
+        /* 英雄區塊修正 */
         header.hero {
             background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 140px 20px 40px 20px;
+            padding: 160px 20px 40px 20px; /* 增加頂部間距避開橫幅 */
             border-bottom: 1px solid #222;
         }
 
@@ -186,6 +206,7 @@
     <!-- 頂部橫幅公告 -->
     <div id="top-announcement-banner">
         <p>死者復甦警告：部分靈魂已成功還陽，請查看電子郵件確認帳號狀態。</p>
+        <button class="reopen-btn" onclick="openBoard()">📜 顯示公告</button>
     </div>
 
     <!-- 大板子公告彈窗 -->
@@ -216,7 +237,7 @@
         </div>
 
         <div id="register-form">
-            <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px;">通報罹難者</h3>
+            <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px; font-family: serif;">通報罹難者</h3>
             <form id="deathForm" onsubmit="submitForm(event)">
                 <div><label>死者名稱 *</label><input type="text" id="entryName" required></div>
                 <div><label>死者 ID *</label><input type="text" id="entryID" required></div>
@@ -241,10 +262,15 @@
         let myUUID = "";
         let myIP = "";
 
-        // 關閉大板子公告並儲存紀錄
+        // 顯示大板子
+        function openBoard() {
+            document.getElementById('announcement-overlay').style.display = 'flex';
+        }
+
+        // 關閉大板子並紀錄
         function closeBoard() {
             document.getElementById('announcement-overlay').style.display = 'none';
-            localStorage.setItem('announcement_closed', 'true');
+            localStorage.setItem('announcement_closed_v2', 'true');
         }
 
         async function initIdentity() {
@@ -274,9 +300,9 @@
         }
 
         window.onload = async () => {
-            // 公告邏輯：檢查是否已關閉過
-            if (localStorage.getItem('announcement_closed') !== 'true') {
-                document.getElementById('announcement-overlay').style.display = 'flex';
+            // 初次進入檢查
+            if (localStorage.getItem('announcement_closed_v2') !== 'true') {
+                openBoard();
             }
 
             const [idTask, blackListBlocked] = await Promise.all([initIdentity(), checkBlacklist()]);
@@ -288,7 +314,7 @@
         async function fetchBannedWords() {
             const res = await fetch(BANNED_WORDS_FILE).catch(() => null);
             if (res && res.ok) {
-                const text = await res.text();
+                const text = await response.text(); // 修正變數參考
                 bannedWords = text.split('\n').map(w => w.trim()).filter(w => w);
             }
         }
