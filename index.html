@@ -37,57 +37,59 @@
             letter-spacing: 5px;
         }
 
-        /* 頂部固定橫幅公告 - 修正不壓縮且留邊距 */
+        /* 頂部固定橫幅公告 - 修正：等比例放大、不壓縮、近滿版 */
         #top-announcement-banner {
             position: fixed;
-            top: 15px; /* 頂部留邊 */
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 92%; /* 左右留邊 */
-            max-width: 1100px;
-            height: 75px; 
+            width: 96%; /* 只比螢幕寬小一點 */
+            max-width: 1200px;
+            aspect-ratio: 12 / 1; /* 依據長條石磚比例設定 */
             background: url('image_1781679686462.jpeg') no-repeat center center;
-            background-size: contain; /* 防止圖片壓縮變形 */
+            background-size: 100% 100%; /* 強制填滿容器，搭配 aspect-ratio 達成等比例 */
             z-index: 900;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0 60px;
+            padding: 0 5%;
             box-sizing: border-box;
-            pointer-events: none; /* 讓容器不擋點擊，內部元素再開啟 */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+            pointer-events: none; /* 穿透點擊 */
         }
         #top-announcement-banner p {
             pointer-events: auto;
-            color: #2a2a2a;
-            font-size: 1.15rem; /* 文字略微放大 */
+            color: #1a1a1a;
+            font-size: 1.25rem; /* 文字放大 */
             font-weight: bold;
             margin: 0;
             text-shadow: 1px 1px 1px rgba(255,255,255,0.4);
             font-family: 'Noto Serif TC', serif;
             flex-grow: 1;
             text-align: center;
-            white-space: nowrap;
         }
         .reopen-btn {
             pointer-events: auto;
-            background: rgba(0,0,0,0.15);
-            border: 1px solid rgba(0,0,0,0.3);
-            color: #222;
-            padding: 6px 15px;
-            font-size: 0.9rem;
+            background: rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.2);
+            color: #333;
+            padding: 8px 18px;
+            font-size: 0.95rem;
             cursor: pointer;
             font-family: 'Noto Serif TC', serif;
             border-radius: 4px;
             transition: 0.3s;
             margin-left: 20px;
+            white-space: nowrap;
             font-weight: bold;
         }
         .reopen-btn:hover {
-            background: rgba(0,0,0,0.3);
+            background: rgba(0,0,0,0.2);
             color: #000;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
         }
 
-        /* 大板子公告彈窗 - 修正文字範圍介於 12% 與 22% 之間 */
+        /* 大板子公告彈窗 - 文字範圍介於 12% 與 22% 之間 */
         #announcement-overlay {
             display: none;
             position: fixed;
@@ -105,12 +107,12 @@
         .announcement-board img {
             width: 100%;
             display: block;
-            filter: drop-shadow(0 0 40px rgba(0,0,0,1));
+            filter: drop-shadow(0 0 50px rgba(0,0,0,1));
         }
         .board-content {
             position: absolute;
             top: 36%;
-            left: 17.5%; /* 取中位數，避免太寬或太窄 */
+            left: 17.5%; /* 精準修正：介於舊版 12% 與新版 22% 之間 */
             right: 17.5%; 
             color: #222;
             font-family: 'Noto Serif TC', serif;
@@ -132,29 +134,18 @@
             border-radius: 5px;
             transition: 0.3s;
         }
-        .close-board-btn:hover {
-            background: #111;
-            color: #fff;
-        }
+        .close-board-btn:hover { background: #111; color: #fff; }
 
-        /* 英雄區塊 */
+        /* 英雄區塊 - 加大間距以容納更厚實的橫幅 */
         header.hero {
             background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
-            padding: 160px 20px 40px 20px; 
+            padding: 180px 20px 40px 20px; 
             border-bottom: 1px solid #222;
         }
 
-        h1 {
-            font-family: 'Noto Serif TC', serif;
-            font-size: 3.5rem;
-            margin: 0;
-            color: #eee;
-            letter-spacing: 2px;
-        }
-
+        h1 { font-family: 'Noto Serif TC', serif; font-size: 3.5rem; margin: 0; color: #eee; letter-spacing: 2px; }
         .owner-tag { margin-top: 18px; font-size: 1rem; color: #bbb; }
         .owner-tag a { color: #fff; text-decoration: none; font-weight: bold; border-bottom: 1px solid #666; }
-
         .subtitle { color: #666; font-style: italic; margin: 25px auto; max-width: 600px; font-size: 1.1rem; }
 
         .victim-counter {
@@ -179,10 +170,7 @@
         .graveyard { display: grid; grid-template-columns: repeat(3, 300px); gap: 50px; padding: 20px 0 100px 0; }
 
         .tombstone-wrapper {
-            position: relative;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(30px);
+            position: relative; width: 100%; opacity: 0; transform: translateY(30px);
             transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         .tombstone-wrapper.show { opacity: 1; transform: translateY(0); }
@@ -267,14 +255,8 @@
         let myUUID = "";
         let myIP = "";
 
-        function openBoard() {
-            document.getElementById('announcement-overlay').style.display = 'flex';
-        }
-
-        function closeBoard() {
-            document.getElementById('announcement-overlay').style.display = 'none';
-            localStorage.setItem('announcement_closed_v3', 'true');
-        }
+        function openBoard() { document.getElementById('announcement-overlay').style.display = 'flex'; }
+        function closeBoard() { document.getElementById('announcement-overlay').style.display = 'none'; localStorage.setItem('announcement_closed_v4', 'true'); }
 
         async function initIdentity() {
             let uuid = localStorage.getItem('meta_funeral_uuid');
@@ -303,13 +285,9 @@
         }
 
         window.onload = async () => {
-            if (localStorage.getItem('announcement_closed_v3') !== 'true') {
-                openBoard();
-            }
-
+            if (localStorage.getItem('announcement_closed_v4') !== 'true') { openBoard(); }
             const [idTask, blackListBlocked] = await Promise.all([initIdentity(), checkBlacklist()]);
             if (blackListBlocked) return;
-
             Promise.all([fetchBannedWords(), fetchGraves()]);
         };
 
@@ -328,9 +306,7 @@
                 deadPeople = parseCSV(text);
                 document.getElementById('victim-count').innerText = deadPeople.length;
                 renderGraveyard(deadPeople);
-            } catch (e) {
-                document.getElementById('loading').innerText = '公墓資料讀取失敗。';
-            }
+            } catch (e) { document.getElementById('loading').innerText = '公墓資料讀取失敗。'; }
         }
 
         function parseCSV(csvText) {
@@ -353,14 +329,7 @@
                 const person = data[i];
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper';
-                grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}" loading="lazy">
-                    <div class="tombstone-text">
-                        <div class="name">${escapeHTML(person.name || '無名氏')}</div>
-                        <div class="id">${escapeHTML(person.id || '未知')}</div>
-                        <div class="date">${escapeHTML(person.date || '日期不詳')}</div>
-                    </div>
-                `;
+                grave.innerHTML = `<img src="${TOMBSTONE_IMG}" loading="lazy"><div class="tombstone-text"><div class="name">${escapeHTML(person.name || '無名氏')}</div><div class="id">${escapeHTML(person.id || '未知')}</div><div class="date">${escapeHTML(person.date || '日期不詳')}</div></div>`;
                 container.appendChild(grave);
                 setTimeout(() => { grave.classList.add('show'); }, i * 60); 
             }
@@ -374,22 +343,12 @@
             filtered.forEach(person => {
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper show';
-                grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}">
-                    <div class="tombstone-text">
-                        <div class="name">${escapeHTML(person.name || '無名氏')}</div>
-                        <div class="id">${escapeHTML(person.id || '未知')}</div>
-                        <div class="date">${escapeHTML(person.date || '日期不詳')}</div>
-                    </div>
-                `;
+                grave.innerHTML = `<img src="${TOMBSTONE_IMG}"><div class="tombstone-text"><div class="name">${escapeHTML(person.name || '無名氏')}</div><div class="id">${escapeHTML(person.id || '未知')}</div><div class="date">${escapeHTML(person.date || '日期不詳')}</div></div>`;
                 container.appendChild(grave);
             });
         }
 
-        function toggleRegisterForm() {
-            const form = document.getElementById('register-form');
-            form.style.display = (form.style.display === 'block') ? 'none' : 'block';
-        }
+        function toggleRegisterForm() { const form = document.getElementById('register-form'); form.style.display = (form.style.display === 'block') ? 'none' : 'block'; }
 
         async function submitForm(e) {
             e.preventDefault();
@@ -399,32 +358,14 @@
             const btn = document.getElementById('submitBtn');
             const fullContent = (name + id).toLowerCase();
             const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
-            btn.innerText = '安葬中...';
-            btn.disabled = true;
-            if (hasBannedWord) {
-                setTimeout(() => { alert('✅ 資料已送出，安葬完成！'); location.reload(); }, 1000);
-                return;
-            }
+            btn.innerText = '安葬中...'; btn.disabled = true;
+            if (hasBannedWord) { setTimeout(() => { alert('✅ 資料已送出，安葬完成！'); location.reload(); }, 1000); return; }
             const formData = new URLSearchParams();
-            formData.append('entry.510043352', name);
-            formData.append('entry.1259375546', id);
-            formData.append('entry.1128410849', date);
-            formData.append('entry.1443440662', myUUID);
-            formData.append('entry.766832530', myIP);
-            try {
-                await fetch(FORM_POST_URL, { method: 'POST', mode: 'no-cors', body: formData });
-                alert('✅ 資料已送出，安葬完成！');
-                location.reload(); 
-            } catch (error) {
-                alert('系統忙碌中。');
-                btn.disabled = false;
-                btn.innerText = '確認送出安葬';
-            }
+            formData.append('entry.510043352', name); formData.append('entry.1259375546', id); formData.append('entry.1128410849', date); formData.append('entry.1443440662', myUUID); formData.append('entry.766832530', myIP);
+            try { await fetch(FORM_POST_URL, { method: 'POST', mode: 'no-cors', body: formData }); alert('✅ 資料已送出，安葬完成！'); location.reload(); } catch (error) { alert('系統忙碌中。'); btn.disabled = false; btn.innerText = '確認送出安葬'; }
         }
 
-        function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag));
-        }
+        function escapeHTML(str) { return str.replace(/[&<>'"]/g, tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)); }
     </script>
 </body>
 </html>
