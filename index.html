@@ -3,84 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1000">
-    <title>2026 Meta 停權事件悼念區</title>
+    <title>2026 Meta大屠殺事件受害者公墓</title>
+    <!-- 引入襯線字體增強莊嚴感 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #1a1a1a;
-            --text-color: #e0e0e0;
-            --stone-text: #4a4a4a; 
+            --bg-color: #0a0a0a;
+            --card-bg: #1a1a1a;
+            --text-color: #d0d0d0;
+            --accent-color: #8b0000; /* 深紅色 */
+            --stone-text: #3a3a3a; 
         }
+        
         body {
             font-family: 'PingFang TC', 'Microsoft JhengHei', sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
-            padding: 40px 20px;
+            padding: 0;
             text-align: center;
         }
 
-        /* 封鎖畫面樣式 */
+        /* 封鎖畫面 */
         #blocked-screen {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             background: black;
-            color: #ff4444;
+            color: var(--accent-color);
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            font-size: 2rem;
-            font-weight: bold;
+            z-index: 10000;
+            font-size: 2.5rem;
+            letter-spacing: 5px;
         }
 
-        h1 { margin-bottom: 10px; font-size: 2.5rem; }
-        p.subtitle { color: #888; margin-bottom: 40px; font-size: 1.1rem; }
-        
+        /* 標題區塊 (Hero Section) */
+        header.hero {
+            background: linear-gradient(to bottom, #000 0%, var(--bg-color) 100%);
+            padding: 80px 20px 40px 20px;
+            border-bottom: 1px solid #222;
+        }
+
+        h1 {
+            font-family: 'Noto Serif TC', serif;
+            font-size: 3.5rem;
+            margin: 0;
+            color: #eee;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255,255,255,0.1);
+        }
+
+        /* 調亮後的擁有者標籤 */
+        .owner-tag {
+            margin-top: 18px;
+            font-size: 1rem;
+            color: #bbb; /* 調亮文字顏色 */
+            letter-spacing: 1px;
+        }
+
+        .owner-tag a {
+            color: #fff; /* 調亮連結顏色為純白 */
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 1px solid #666;
+            transition: 0.3s;
+            padding-bottom: 2px;
+        }
+
+        .owner-tag a:hover {
+            color: #ff4444; /* 懸停時帶點淡紅色警告感 */
+            border-bottom-color: #ff4444;
+        }
+
+        .subtitle {
+            color: #666;
+            font-style: italic;
+            margin: 25px auto;
+            max-width: 600px;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* 計數器樣式 */
+        .victim-counter {
+            background: rgba(255,255,255,0.05);
+            display: inline-block;
+            padding: 10px 30px;
+            border-radius: 50px;
+            border: 1px solid #333;
+            font-size: 0.95rem;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        #victim-count {
+            color: #fff;
+            font-weight: bold;
+            margin: 0 5px;
+            font-size: 1.1rem;
+        }
+
         /* 控制面板 */
         .controls {
-            margin-bottom: 50px;
+            margin: 40px auto;
             display: flex;
             gap: 15px;
             justify-content: center;
             align-items: center;
         }
+
         input[type="text"] {
-            padding: 12px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            border-radius: 30px;
             border: 1px solid #444;
-            background: #333;
+            background: #111;
             color: #fff;
             font-size: 16px;
             width: 350px;
+            outline: none;
+            transition: 0.3s;
         }
+
+        input[type="text"]:focus {
+            border-color: #777;
+            background: #181818;
+        }
+
         button {
-            padding: 12px 25px;
+            padding: 12px 30px;
             border: none;
-            border-radius: 5px;
-            background-color: #555;
-            color: white;
+            border-radius: 30px;
+            background-color: #333;
+            color: #ccc;
             cursor: pointer;
             font-size: 16px;
             transition: 0.3s;
         }
-        button:hover { background-color: #777; }
-        button.btn-danger { background-color: #8b0000; }
 
-        /* 登記死亡表單 */
+        button:hover {
+            background-color: #444;
+            color: #fff;
+        }
+
+        button.btn-danger {
+            background-color: var(--accent-color);
+            color: #fff;
+        }
+
+        button.btn-danger:hover {
+            background-color: #b30000;
+        }
+
+        /* 登記表單 */
         #register-form {
             display: none;
-            background: #2a2a2a;
-            padding: 25px;
-            border-radius: 8px;
+            background: #151515;
+            padding: 30px;
+            border-radius: 15px;
             max-width: 450px;
             margin: 0 auto 50px auto;
             text-align: left;
-            border: 1px solid #444;
+            border: 1px solid #222;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
-        #register-form div { margin-bottom: 15px; }
-        #register-form label { display: block; margin-bottom: 5px; color: #ccc; }
-        #register-form input { width: 100%; padding: 10px; box-sizing: border-box; background: #1a1a1a; border: 1px solid #444; color: white; }
+
+        #register-form div { margin-bottom: 18px; }
+        #register-form label { display: block; margin-bottom: 8px; color: #888; font-size: 0.9rem; }
+        #register-form input { width: 100%; padding: 12px; box-sizing: border-box; background: #0a0a0a; border: 1px solid #333; color: white; border-radius: 5px; }
 
         /* 墓園區域：固定三欄 */
         .graveyard-container {
@@ -91,21 +182,21 @@
         .graveyard {
             display: grid;
             grid-template-columns: repeat(3, 300px);
-            gap: 40px;
-            padding-bottom: 100px;
+            gap: 50px;
+            padding: 20px 0 100px 0;
         }
 
-        /* 墓碑圖片與文字疊加 */
+        /* 墓碑設計 */
         .tombstone-wrapper {
             position: relative;
             width: 100%;
-            animation: fadeIn 0.8s ease-out;
+            animation: fadeIn 1.2s ease-out;
         }
         .tombstone-wrapper img {
             width: 100%;
             height: auto;
             display: block;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.5));
+            filter: grayscale(0.2) drop-shadow(0 10px 30px rgba(0,0,0,0.8));
         }
         
         .tombstone-text {
@@ -115,56 +206,62 @@
             right: 15%;
             text-align: center;
             color: var(--stone-text);
-            font-family: 'Times New Roman', 'Microsoft JhengHei', serif;
+            font-family: 'Noto Serif TC', serif;
             font-weight: bold;
             pointer-events: none;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.2), -1px -1px 0px rgba(0,0,0,0.4);
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.15), -1px -1px 0px rgba(0,0,0,0.3);
         }
-        .tombstone-text .name { font-size: 1.4rem; margin-bottom: 10px; color: #222; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 10px; word-break: break-all; min-height: 1.2em; }
+        .tombstone-text .name { font-size: 1.4rem; margin-bottom: 12px; color: #1a1a1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+        .tombstone-text .id { font-size: 0.95rem; margin-bottom: 12px; word-break: break-all; min-height: 1.2em; color: #3a3a3a; }
         .tombstone-text .date { font-size: 0.85rem; border-top: 1px solid #777; padding-top: 8px; margin-top: 5px; color: #555; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-        #loading { margin: 100px; font-size: 1.5rem; color: #666; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        #loading { margin: 100px; font-size: 1.2rem; color: #444; letter-spacing: 2px; }
     </style>
 </head>
 <body>
 
     <!-- 封鎖畫面 -->
     <div id="blocked-screen">
-        <div>🚫 存取拒絕</div>
-        <div style="font-size: 1rem; margin-top: 20px; color: #555;">您的連線已被禁止進入此區域。</div>
+        <div>ACCESS DENIED</div>
+        <div style="font-size: 1rem; margin-top: 20px; color: #444; letter-spacing: 1px;">您的設備已被禁止進入此數位公墓。</div>
     </div>
 
     <div id="main-content">
-        <h1>🕊️ 2026 Meta 停權事件悼念區</h1>
-        <p class="subtitle">他們沒有違反社群守則，他們只是運氣不好。</p>
+        <header class="hero">
+            <h1>2026 Meta大屠殺事件受害者公墓</h1>
+            <p class="owner-tag">由 <a href="https://www.threads.net/@iam.xiaoyou" target="_blank">@iam.xiaoyou</a> 建立與維護</p>
+            <p class="subtitle">「我們致力於打造一個安全的社群... 直到你消失為止。」</p>
+            <div class="victim-counter">
+                目前已有 <span id="victim-count">...</span> 位數位靈魂在此長眠
+            </div>
+        </header>
 
         <div class="controls">
-            <input type="text" id="searchInput" placeholder="搜尋死者名稱或 ID..." onkeyup="filterGraves()">
-            <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記死亡</button>
+            <input type="text" id="searchInput" placeholder="搜尋姓名或 ID..." onkeyup="filterGraves()">
+            <button class="btn-danger" onclick="toggleRegisterForm()">📝 登記新罹難者</button>
         </div>
 
         <div id="register-form">
-            <h3 style="margin-top: 0; border-bottom: 1px solid #555; padding-bottom: 10px;">通報罹難者</h3>
+            <h3 style="margin-top: 0; border-bottom: 1px solid #333; padding-bottom: 15px; font-family: serif;">通報罹難者</h3>
             <form id="deathForm" onsubmit="submitForm(event)">
                 <div>
                     <label>死者名稱 *</label>
-                    <input type="text" id="entryName" required>
+                    <input type="text" id="entryName" required placeholder="例如：王小明">
                 </div>
                 <div>
                     <label>死者 ID *</label>
-                    <input type="text" id="entryID" required>
+                    <input type="text" id="entryID" required placeholder="例如：xiaoming123">
                 </div>
                 <div>
                     <label>死亡時間 (年-月-日)</label>
-                    <input type="text" id="entryDate" placeholder="2026-06-15">
+                    <input type="text" id="entryDate" placeholder="例如：2026-06-17">
                 </div>
-                <button type="submit" id="submitBtn" style="width: 100%; background-color: #4CAF50; font-weight: bold;">確認送出安葬</button>
+                <button type="submit" id="submitBtn" style="width: 100%; background-color: #8b0000; font-weight: bold; color: white;">確認送出安葬</button>
             </form>
         </div>
 
-        <div id="loading">正在載入墓園...</div>
+        <div id="loading">正在開啟公墓大門...</div>
         
         <div class="graveyard-container">
             <div class="graveyard" id="graveyard"></div>
@@ -184,9 +281,7 @@
         let myUUID = "";
         let myIP = "";
 
-        // 1. 初始化身份與 IP
         async function initIdentity() {
-            // 處理 UUID
             let uuid = localStorage.getItem('meta_funeral_uuid');
             if (!uuid) {
                 uuid = 'ID-' + Math.random().toString(36).substr(2, 9).toUpperCase() + '-' + Date.now();
@@ -194,24 +289,19 @@
             }
             myUUID = uuid;
 
-            // 處理 IP
             try {
                 const response = await fetch('https://api.ipify.org?format=json');
                 const data = await response.json();
                 myIP = data.ip;
-            } catch (e) {
-                myIP = "UNKNOWN";
-            }
+            } catch (e) { myIP = "UNKNOWN"; }
         }
 
-        // 2. 檢查黑名單 (UUID 或 IP)
         async function checkBlacklist() {
             try {
                 const response = await fetch(BLACKLIST_FILE + '?t=' + Date.now());
                 if (response.ok) {
                     const text = await response.text();
-                    const list = text.split('\n').map(item => item.trim()).filter(item => item);
-                    
+                    const list = text.split('\n').map(i => i.trim()).filter(i => i);
                     if (list.includes(myUUID) || list.includes(myIP)) {
                         document.getElementById('main-content').style.display = 'none';
                         document.getElementById('blocked-screen').style.display = 'flex';
@@ -246,9 +336,10 @@
                 const response = await fetch(SHEET_CSV_URL);
                 const text = await response.text();
                 deadPeople = parseCSV(text);
+                document.getElementById('victim-count').innerText = deadPeople.length;
                 renderGraveyard(deadPeople);
             } catch (e) {
-                document.getElementById('loading').innerText = '讀取墓園資料失敗。';
+                document.getElementById('loading').innerText = '公墓資料讀取失敗。';
             }
         }
 
@@ -276,7 +367,7 @@
                 const grave = document.createElement('div');
                 grave.className = 'tombstone-wrapper';
                 grave.innerHTML = `
-                    <img src="${TOMBSTONE_IMG}" alt="墓碑">
+                    <img src="${TOMBSTONE_IMG}">
                     <div class="tombstone-text">
                         <div class="name">${escapeHTML(person.name)}</div>
                         <div class="id">${escapeHTML(person.id)}</div>
@@ -310,10 +401,9 @@
             const fullContent = (name + id).toLowerCase();
             const hasBannedWord = bannedWords.some(word => fullContent.includes(word.toLowerCase()));
 
-            btn.innerText = '處理中...';
+            btn.innerText = '安葬中...';
             btn.disabled = true;
 
-            // 禁詞偽裝
             if (hasBannedWord) {
                 setTimeout(() => {
                     alert('✅ 資料已送出，安葬完成！');
@@ -322,7 +412,6 @@
                 return;
             }
 
-            // 真實傳送
             const formData = new URLSearchParams();
             formData.append('entry.510043352', name);
             formData.append('entry.1259375546', id);
@@ -332,15 +421,14 @@
 
             try {
                 await fetch(FORM_POST_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
+                    method: 'POST', mode: 'no-cors',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: formData
                 });
                 alert('✅ 資料已送出，安葬完成！');
                 location.reload(); 
             } catch (error) {
-                alert('系統忙碌中，請稍後再試。');
+                alert('系統忙碌中。');
                 btn.disabled = false;
                 btn.innerText = '確認送出安葬';
             }
